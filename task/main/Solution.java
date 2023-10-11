@@ -22,33 +22,7 @@ public class Solution{
                     itemPrices = priceInsertion(scanner, itemPrices);
                     
                 case "shop":
-
-                    shoppingBasketLoop : while(true){
-                        
-                        System.out.println("\n" + "Please enter scanned item: ");
-                        String line = scanner.nextLine();
-
-                        if (line.length() > 1){
-                            // Not a valid input, should only be one char long
-                            System.out.println("Invalid entry, items are only one character. Please try again:");
-                        } else {
-                            Character itemName = line.charAt(0);
-                            if (itemPrices.keySet().contains(itemName)) {
-                                // Valid Item, add to basket
-                                System.out.println(String.format("Adding 1 %s to the basket.", itemName));
-                                basket.merge(itemName, 1, Integer::sum);
-
-                                // Calculate subtotal
-                                currentTotal = calculateCurrentTotal(basket, itemPrices);
-
-                                System.out.println(String.format("Current basket total is £%d", currentTotal));
-
-                            } else {
-                                // Invalid Item
-                                System.out.println(String.format("Item %s is not a valid item, please try another item:", itemName));
-                            }
-                        }
-                    }
+                    basket = basketInsertion(scanner, itemPrices, basket);
                     
                 case "exit":
                     break mainLoop;
@@ -57,6 +31,44 @@ public class Solution{
         }
 
         scanner.close();
+    }
+
+    private static HashMap<Character,Integer> basketInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices,
+            HashMap<Character, Integer> basket) {
+        shoppingBasketLoop : while(true){
+
+            System.out.println("\n" + "Please enter an item name to add to basket: ");
+            String line = scanner.nextLine();
+
+            if (line.length() > 1){
+                // Not a valid input, should only be one char long
+                System.out.println("Invalid entry, items are only one character. Please try again:");
+            } else {
+                Character itemName = line.charAt(0);
+                if (itemPrices.keySet().contains(itemName)) {
+                    // Valid Item, add to basket
+                    System.out.println(String.format("Adding 1 %s to the basket.", itemName));
+                    basket.merge(itemName, 1, Integer::sum);
+
+                    System.out.println(String.format("Current basket total is £%d", calculateCurrentTotal(basket, itemPrices)));
+
+                } else {
+                    // Invalid Item
+                    System.out.println(String.format("Item %s is not a valid item, please try another item:", itemName));
+                }
+            }
+            addAnotherItemToBaskerChoiceLoop : while (true) {
+                System.out.print("Add another item? (y/n)");
+                String userChoice = scanner.nextLine().toLowerCase();
+                if (userChoice.equals("n") || userChoice.equals("no")) {
+                    break shoppingBasketLoop;
+                } else if (userChoice.equals("y") && userChoice.equals("yes")){
+                    break addAnotherItemToBaskerChoiceLoop;
+                } 
+                System.out.println("Invalid entry");
+            }
+        }
+        return basket;
     }
 
     private static HashMap<Character, ItemPrice> priceInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices) {
