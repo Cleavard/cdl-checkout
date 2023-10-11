@@ -1,24 +1,23 @@
 package test;
 
 import org.junit.*;
-import org.junit.runners.AllTests;
-
 
 public class solution {
 
     // Test cases for core functionality
     
     @Test
-    public void testStartup(){}
+    public void testAddNewPrice(){}
 
     @Test
-    public void testStartupInvalid(){}
+    public void testAddNewPriceInvalid(){}
 
     @Test
-    public void testStartupEmpty(){}
+    public void testAddNewPriceEmpty(){}
+
 
     @Test
-    public void testStartupFinish(){}
+    public void testStartNewBucket(){}
 
     @Test
     public void testItemScan(){}
@@ -27,7 +26,11 @@ public class solution {
     public void testItemScanInvalid(){}
 
     @Test
+    public void testItemScanEmpty(){}
+
+    @Test
     public void testItemScanDeal(){}
+
 
     @Test
     public void testFinalTotal(){}
