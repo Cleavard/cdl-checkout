@@ -1,4 +1,4 @@
-package task.classes;
+package src.main.resources.classes;
 
 
 public class ItemPrice {
