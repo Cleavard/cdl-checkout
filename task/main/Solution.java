@@ -1,16 +1,17 @@
-package src.main.java.com.solution;
+package task.main;
 
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Map.Entry;
 
-import src.main.resources.classes.ItemPrice;
+import task.classes.ItemPrice;
 
 public class Solution{
     public static void main (String[] args) {
         Scanner scanner = new Scanner(System.in);
         HashMap<Character, ItemPrice> itemPrices = new HashMap<Character, ItemPrice>();
         HashMap<Character, Integer> basket = new HashMap<Character, Integer>();
+        Double currentTotal = 0.0;
 
         mainLoop : while (true) {
             //read user input
@@ -22,9 +23,6 @@ public class Solution{
                     
                 case "shop":
                     basket = basketInsertion(scanner, itemPrices, basket);
-                
-                case "checkout":
-                    System.out.println(String.format("Basket total: £%d", calculateCurrentTotal(basket, itemPrices)));
                     
                 case "exit":
                     break mainLoop;
@@ -35,7 +33,7 @@ public class Solution{
         scanner.close();
     }
 
-    public static HashMap<Character,Integer> basketInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices,
+    private static HashMap<Character,Integer> basketInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices,
             HashMap<Character, Integer> basket) {
         shoppingBasketLoop : while(true){
 
@@ -73,7 +71,7 @@ public class Solution{
         return basket;
     }
 
-    public static HashMap<Character, ItemPrice> priceInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices) {
+    private static HashMap<Character, ItemPrice> priceInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices) {
         priceInputLoop : while (true) {
             System.out.println("Enter item name: ");
             Character newItemName = scanner.nextLine().charAt(0);
@@ -106,7 +104,7 @@ public class Solution{
         return itemPrices;
     }
 
-    public static Double calculateCurrentTotal(HashMap<Character, Integer> basket, HashMap<Character, ItemPrice> itemPrices){
+    private static Double calculateCurrentTotal(HashMap<Character, Integer> basket, HashMap<Character, ItemPrice> itemPrices){
         Double total = 0.0;
 
         for (Entry<Character, Integer> basketEntry : basket.entrySet()) {
