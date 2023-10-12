@@ -5,26 +5,28 @@ import java.util.Scanner;
 import java.util.Map.Entry;
 
 
-
 public class RcsolutionApplication {
 
 	public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         HashMap<Character, ItemPrice> itemPrices = new HashMap<Character, ItemPrice>();
         HashMap<Character, Integer> basket = new HashMap<Character, Integer>();
-        Double currentTotal = 0.0;
+
+        clearScreen();
 
         mainLoop : while (true) {
+            System.out.println("What would you like to do?");
             //read user input
             String userInput = scanner.nextLine().toLowerCase();
+
 
             switch (userInput) {
                 case "price":
                     itemPrices = priceInsertion(scanner, itemPrices);
-                    
+                    continue;
                 case "shop":
                     basket = basketInsertion(scanner, itemPrices, basket);
-                    
+                    continue;
                 case "exit":
                     break mainLoop;
                 
@@ -34,6 +36,15 @@ public class RcsolutionApplication {
         scanner.close();
     }
 
+    /**
+     * Allows the terminal user to enter an item name when promted to add it their basket.
+     * This can continue as many times as the user desires to enter as many products as desired.
+     * 
+     * @param scanner
+     * @param itemPrices        List of current item prices
+     * @param basket            List of current user bucket
+     * @return                  Updated basket
+     */
     public static HashMap<Character,Integer> basketInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices,
             HashMap<Character, Integer> basket) {
         shoppingBasketLoop : while(true){
@@ -55,7 +66,7 @@ public class RcsolutionApplication {
                     System.out.println(String.format("Adding 1 %s to the basket.", itemName));
                     basket.merge(itemName, 1, Integer::sum);
 
-                    System.out.println(String.format("Current basket total is £%d", calculateCurrentTotal(basket, itemPrices)));
+                    System.out.println(String.format("Current basket total is £%s", Double.toString(calculateCurrentTotal(basket, itemPrices))));
 
                 } else {
                     // Invalid Item
@@ -63,11 +74,11 @@ public class RcsolutionApplication {
                 }
             }
             addAnotherItemToBaskerChoiceLoop : while (true) {
-                System.out.print("Add another item? (y/n)");
+                System.out.println("Add another item? (y/n)");
                 String userChoice = scanner.nextLine().toLowerCase();
                 if (userChoice.equals("n") || userChoice.equals("no")) {
                     break shoppingBasketLoop;
-                } else if (userChoice.equals("y") && userChoice.equals("yes")){
+                } else if (userChoice.equals("y") || userChoice.equals("yes")){
                     break addAnotherItemToBaskerChoiceLoop;
                 } 
                 System.out.println("Invalid entry");
@@ -76,6 +87,7 @@ public class RcsolutionApplication {
         return basket;
     }
 
+    
     public static HashMap<Character, ItemPrice> priceInsertion(Scanner scanner, HashMap<Character, ItemPrice> itemPrices) {
         priceInputLoop : while (true) {
             try {
@@ -101,17 +113,17 @@ public class RcsolutionApplication {
                 itemPrices.put(newItemName, newItemPrice);
 
                 addAnotherItemChoiceLoop : while (true) {
-                    System.out.print("Add another item? (y/n)");
+                    System.out.println("Add another item? (y/n)");
                     String userChoice = scanner.nextLine().toLowerCase();
                     if (userChoice.equals("n") || userChoice.equals("no")) {
                         break priceInputLoop;
-                    } else if (userChoice.equals("y") && userChoice.equals("yes")){
+                    } else if (userChoice.equals("y") || userChoice.equals("yes")){
                         break addAnotherItemChoiceLoop;
                     } 
                     System.out.println("Invalid entry");
                 }
 
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | StringIndexOutOfBoundsException e) {
                 System.out.println("Please enter a value for each");
             } catch (NumberFormatException e){
                 System.out.println("Please enter a valid number");
@@ -139,4 +151,9 @@ public class RcsolutionApplication {
 
         return total;
     }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }  
 }
