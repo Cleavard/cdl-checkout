@@ -1,6 +1,5 @@
 package com.cdl.checkout.rcsolution;
 
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
@@ -8,9 +7,9 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,7 +28,7 @@ public class RcsolutionApplicationTest {
     static ByteArrayOutputStream byteArrayOutputStream;
     static PrintStream systemOut = System.out;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup(){
         scanner = Mockito.mock(Scanner.class);
 
@@ -118,7 +117,7 @@ public class RcsolutionApplicationTest {
         assertEquals(Double.valueOf(0), RcsolutionApplication.calculateCurrentTotal(new HashMap<>(), testItemPrices));
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         System.setOut(systemOut);
     }

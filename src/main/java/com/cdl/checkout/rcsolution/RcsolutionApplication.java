@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Map.Entry;
 
-
 public class RcsolutionApplication {
 
 	public static void main(String[] args) {
@@ -24,18 +23,35 @@ public class RcsolutionApplication {
                 case "price":
                     itemPrices = priceInsertion(scanner, itemPrices);
                     continue;
+                case "menu":
+                    for (Entry<Character, ItemPrice> entry : itemPrices.entrySet()) {
+                        if (entry.getValue().getSpecialAmount() == 0) {
+                            System.out.println(String.format("Name:%s Price:£%.2f ", entry.getKey(), entry.getValue().getPrice()));
+                        } else {
+                            ItemPrice itemPrice = entry.getValue();
+                            System.out.println(String.format("Name:%s Price:£%.2f Deal:%d for £%.2f", entry.getKey(), itemPrice.getPrice(), itemPrice.getSpecialAmount(), itemPrice.getSpecialPrice()));
+                        }
+                        System.out.println();
+                        continue;
+                    }
+                    continue;
                 case "shop":
                     basket = basketInsertion(scanner, itemPrices, basket);
+                    continue;
+                case "total":
+                    System.out.println(String.format("Basket total is £%.2f", calculateCurrentTotal(basket, itemPrices)));
                     continue;
                 case "help":
                     System.out.println("price: Enters admin mode for creation of new items and their prices.");
                     System.out.println("shop: Enters shopping mode for creation of a basket and addition of items with running totals.");
+                    System.out.println("menu: Prints info on all items currently present in the price system.");
+                    System.out.println("total: Prints total cost of the current basket.");
                     System.out.println("clear: Removes all previous text from the terminal for a fresh start. Does not effect the items or basket.");
                     System.out.println("help: You should already know what this does.");
                     System.out.println("exit: End the program.\n");
                     continue;
                 case "duck":
-                    System.out.println("Quack");
+                    System.out.println("Quack\n");
                     continue;
                 case "clear":
                     clearTerminal();
@@ -54,7 +70,7 @@ public class RcsolutionApplication {
      * Allows the terminal user to enter an item name when promted to add it their basket.
      * This can continue as many times as the user desires to enter as many products as desired.
      * 
-     * @param scanner
+     * @param scanner           Scanner that reads user terminal input
      * @param itemPrices        List of current item prices
      * @param basket            List of current user bucket
      * @return                  Updated basket
@@ -65,7 +81,7 @@ public class RcsolutionApplication {
         shoppingBasketLoop : while(true){
 
             System.out.println("\nPlease enter an item name to add to basket: ");
-            String line = scanner.nextLine();
+            String line = scanner.nextLine().toUpperCase();
 
             // Do nothing if entry is blank
             if (line.isBlank()) {
@@ -85,7 +101,7 @@ public class RcsolutionApplication {
                     basket.merge(itemName, 1, (a, b) -> a + b);
 
                     // Display subtotal
-                    System.out.println(String.format("\nCurrent basket total is £%s", Double.toString(calculateCurrentTotal(basket, itemPrices))));
+                    System.out.println(String.format("\nCurrent basket total is £%.2f", calculateCurrentTotal(basket, itemPrices)));
 
                 } else {
                     // Invalid Item
@@ -112,7 +128,7 @@ public class RcsolutionApplication {
     /**
      * Allows the terminal user to enter new itemprices. Takes a prompt for each item name, price, special amount and special price.
      * Validates each entry before object creation and addition to the map. User can enter as many as required.
-     * @param scanner
+     * @param scanner           Scanner that reads user terminal input
      * @param itemPrices        List of current ItemPrices
      * @return                  Updated list of ItemPrices
      */
@@ -128,6 +144,9 @@ public class RcsolutionApplication {
                 Character newItemName = scanner.nextLine().toUpperCase().charAt(0);
                 if (!Character.isLetter(newItemName)) {
                     System.out.println("Please enter a valid letter");
+                    continue;
+                } else if (itemPrices.keySet().contains(newItemName)){
+                    System.out.println(String.format("Item %s has already been added, please try another item name.\n", newItemName));
                     continue;
                 }
                 System.out.println("Enter price: ");
@@ -192,7 +211,7 @@ public class RcsolutionApplication {
     }
 
     /**
-     * Clears the curent terminal.
+     * Clears the terminal.
      */
     public static void clearTerminal() {  
         System.out.print("\033[H\033[2J");  
